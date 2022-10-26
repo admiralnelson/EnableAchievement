@@ -12,6 +12,7 @@ Public Module EnableAchievement
                 Dim achievementManagerBehaviour = campaignStarter.CampaignBehaviors.Where(Function(x) x.StringId.Contains("AchievementsCampaignBehavior")).FirstOrDefault()
                 Dim theType = GetType(AchievementsCampaignBehavior)
                 Dim deactivateAchievements = theType.GetProperty("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
+                If IsNothing(deactivateAchievements) Then Exit Sub
                 deactivateAchievements.SetValue(achievementManagerBehaviour, False)
             End Sub)
     End Sub
