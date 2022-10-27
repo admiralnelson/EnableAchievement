@@ -225,18 +225,22 @@ End Module
 
 Public Module EnableAchievement
     Public Sub DoIt(gameStarterObject As IGameStarter)
-        Dim campaignStarter = CType(gameStarterObject, CampaignGameStarter)
-        Dim achievementManagerBehaviour = campaignStarter.CampaignBehaviors.Where(Function(x) x.StringId.Contains("AchievementsCampaignBehavior")).FirstOrDefault()
-        If IsNothing(achievementManagerBehaviour) Then
-            campaignStarter.AddBehavior(New AchievementsCampaignBehavior())
-        End If
-        Task.Delay(1000 * 1).ContinueWith(
-            Sub()
-                Dim theType = GetType(AchievementsCampaignBehavior)
-                Dim deactivateAchievements = theType.GetProperty("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
-                If IsNothing(deactivateAchievements) Then Exit Sub
-                deactivateAchievements.SetValue(achievementManagerBehaviour, False)
-            End Sub)
+        Try
+            Dim campaignStarter = CType(gameStarterObject, CampaignGameStarter)
+            Dim achievementManagerBehaviour = campaignStarter.CampaignBehaviors.Where(Function(x) x.StringId.Contains("AchievementsCampaignBehavior")).FirstOrDefault()
+            If IsNothing(achievementManagerBehaviour) Then
+                campaignStarter.AddBehavior(New AchievementsCampaignBehavior())
+            End If
+            Task.Delay(1000 * 1).ContinueWith(
+                Sub()
+                    Dim theType = GetType(AchievementsCampaignBehavior)
+                    Dim deactivateAchievements = theType.GetProperty("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
+                    If IsNothing(deactivateAchievements) Then Exit Sub
+                    deactivateAchievements.SetValue(achievementManagerBehaviour, False)
+                End Sub)
+        Catch ex As InvalidCastException
+            Print("achievement enabler: there's no achievement in custom battle :^)")
+        End Try
     End Sub
     <HarmonyPatch(GetType(AchievementsCampaignBehavior), "CheckAchievementSystemActivity")>
     Public Class CheckAchievementSystemActivity
