@@ -1,10 +1,11 @@
 <Module>
     <Name value="Enable Achievement"/>
     <Id value="EnableAchievement"/>
-    <Version value="v0.0.1"/>
+    <Version value="v0.0.2"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>
+      <DependedModule Id="Bannerlord.Harmony" />
     </DependedModules>
      <SubModules>
          <SubModule>
