@@ -95,11 +95,11 @@ Public Module BunchOfDelegates
         If IsNothing(theMethod) Then Throw New KeyNotFoundException
         Return theMethod.CreateDelegate(GetType(Action(Of CharacterObject, MBReadOnlyList(Of CharacterObject), Town, ItemObject)), target)
     End Function
-    Public Function OnSiegeCompleted(target As AchievementsCampaignBehavior) As Action(Of Settlement, MobileParty, Boolean, Boolean)
+    Public Function OnSiegeCompleted(target As AchievementsCampaignBehavior) As Action(Of Settlement, MobileParty, Boolean, MapEvent.BattleTypes)
         Dim theType = GetType(AchievementsCampaignBehavior)
         Dim theMethod = theType.GetMethod("OnSiegeCompleted", BindingFlags.NonPublic Or BindingFlags.Instance)
         If IsNothing(theMethod) Then Throw New KeyNotFoundException
-        Return theMethod.CreateDelegate(GetType(Action(Of Settlement, MobileParty, Boolean, Boolean)), target)
+        Return theMethod.CreateDelegate(GetType(Action(Of Settlement, MobileParty, Boolean, MapEvent.BattleTypes)), target)
     End Function
     Public Function OnMapEventEnded(target As AchievementsCampaignBehavior) As Action(Of MapEvent)
         Dim theType = GetType(AchievementsCampaignBehavior)
