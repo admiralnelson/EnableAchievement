@@ -1,7 +1,7 @@
 <Module>
     <Name value="Enable Achievement"/>
     <Id value="EnableAchievement"/>
-    <Version value="v0.0.2"/>
+    <Version value="v1.0.0"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>
