@@ -265,7 +265,7 @@ Public Module EnableAchievement
             CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, OnQuestCompleted(this))
             CampaignEvents.OnBuildingLevelChangedEvent.AddNonSerializedListener(this, OnBuildingLevelChanged(this))
             CampaignEvents.OnNewItemCraftedEvent.AddNonSerializedListener(this, OnNewItemCrafted(this))
-            CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom(this))
+            CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom(this))
             CampaignEvents.OnClanDestroyedEvent.AddNonSerializedListener(this, OnClanDestroyed(this))
             CampaignEvents.OnPlayerTradeProfitEvent.AddNonSerializedListener(this, ProgressTotalTradeProfit(this))
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick(this))
