@@ -2,6 +2,7 @@
 Imports HarmonyLib
 Imports StoryMode
 Imports StoryMode.GameComponents.CampaignBehaviors
+Imports TaleWorlds
 Imports TaleWorlds.CampaignSystem
 Imports TaleWorlds.CampaignSystem.Actions
 Imports TaleWorlds.CampaignSystem.Actions.ChangeOwnerOfSettlementAction
@@ -218,6 +219,10 @@ Public Module BunchOfDelegates
 End Module
 
 Public Module EnableAchievement
+    Public Sub ShowToastMessage(str As String)
+        MBInformationManager.AddQuickInformation(New Localization.TextObject(str))
+    End Sub
+
     Public Sub DoIt(gameStarterObject As IGameStarter)
         Try
             Dim campaignStarter = CType(gameStarterObject, CampaignGameStarter)
@@ -225,12 +230,13 @@ Public Module EnableAchievement
             If IsNothing(achievementManagerBehaviour) Then
                 campaignStarter.AddBehavior(New AchievementsCampaignBehavior())
             End If
-            Task.Delay(1000 * 1).ContinueWith(
+            Task.Delay(1000 * 2).ContinueWith(
                 Sub()
                     Dim theType = GetType(AchievementsCampaignBehavior)
                     Dim deactivateAchievements = theType.GetProperty("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
                     If IsNothing(deactivateAchievements) Then Exit Sub
                     deactivateAchievements.SetValue(achievementManagerBehaviour, False)
+                    ShowToastMessage("Hello from Achievements Enabler!")
                 End Sub)
         Catch ex As InvalidCastException
             Print("achievement enabler: there's no achievement in custom battle :^)")
@@ -240,6 +246,28 @@ Public Module EnableAchievement
     Public Class CheckAchievementSystemActivity
         Public Shared Function Prefix(ByRef __result As Boolean) As Boolean
             __result = True
+            Return False
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' Taleworlds momentos
+    ''' </summary>
+    <HarmonyPatch(GetType(AchievementsCampaignBehavior), "SyncData")>
+    Public Class ForceSyncDataAchievementsToTrue
+        Public Shared Function Prefix(ByRef __instance As AchievementsCampaignBehavior, dataStore As IDataStore) As Boolean
+            Try
+                Dim deactivateAchievements As Boolean = False
+                dataStore.SyncData("_deactivateAchievements", deactivateAchievements)
+
+                Dim theType = GetType(AchievementsCampaignBehavior)
+                Dim deactivateAchievementsField = theType.GetField("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
+                If Not IsNothing(deactivateAchievementsField) Then
+                    deactivateAchievementsField.SetValue(__instance, False)
+                End If
+            Catch ex As Exception
+                Console.WriteLine("Error in Prefix method: " & ex.Message)
+            End Try
             Return False
         End Function
     End Class
@@ -269,7 +297,7 @@ Public Module EnableAchievement
             CampaignEvents.OnClanDestroyedEvent.AddNonSerializedListener(this, OnClanDestroyed(this))
             CampaignEvents.OnPlayerTradeProfitEvent.AddNonSerializedListener(this, ProgressTotalTradeProfit(this))
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick(this))
-            CampaignEvents.HeroesMarried.AddNonSerializedListener(this, CheckHeroMarriage(this))
+            CampaignEvents.BeforeHeroesMarried.AddNonSerializedListener(this, CheckHeroMarriage(this))
             CampaignEvents.KingdomDecisionConcluded.AddNonSerializedListener(this, CheckKingdomDecisionConcluded(this))
             CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted(this))
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEnter(this))
