@@ -66,11 +66,11 @@ Public Module BunchOfDelegates
         If IsNothing(theMethod) Then Throw New KeyNotFoundException
         Return theMethod.CreateDelegate(GetType(Action(Of Clan, Boolean)), target)
     End Function
-    Public Function OnHideoutBattleCompleted(target As AchievementsCampaignBehavior) As Action(Of BattleSideEnum, HideoutEventComponent)
+    Public Function OnHideoutBattleCompleted(target As AchievementsCampaignBehavior) As Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)
         Dim theType = GetType(AchievementsCampaignBehavior)
         Dim theMethod = theType.GetMethod("OnHideoutBattleCompleted", BindingFlags.NonPublic Or BindingFlags.Instance)
         If IsNothing(theMethod) Then Throw New KeyNotFoundException
-        Return theMethod.CreateDelegate(GetType(Action(Of BattleSideEnum, HideoutEventComponent)), target)
+        Return theMethod.CreateDelegate(GetType(Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)), target)
     End Function
     Public Function ProgressHeroSkillValue(target As AchievementsCampaignBehavior) As Action(Of Hero, SkillObject, Integer, Boolean)
         Dim theType = GetType(AchievementsCampaignBehavior)
