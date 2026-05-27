@@ -66,12 +66,12 @@ Public Module BunchOfDelegates
         If IsNothing(theMethod) Then Throw New KeyNotFoundException
         Return theMethod.CreateDelegate(GetType(Action(Of Clan, Boolean)), target)
     End Function
-    Public Function OnHideoutBattleCompleted(target As AchievementsCampaignBehavior) As Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)
-        Dim theType = GetType(AchievementsCampaignBehavior)
-        Dim theMethod = theType.GetMethod("OnHideoutBattleCompleted", BindingFlags.NonPublic Or BindingFlags.Instance)
-        If IsNothing(theMethod) Then Throw New KeyNotFoundException
-        Return theMethod.CreateDelegate(GetType(Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)), target)
-    End Function
+    'Public Function OnHideoutBattleCompleted(target As AchievementsCampaignBehavior) As Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)
+    '    Dim theType = GetType(AchievementsCampaignBehavior)
+    '    Dim theMethod = theType.GetMethod("OnHideoutBattleCompleted", BindingFlags.NonPublic Or BindingFlags.Instance)
+    '    If IsNothing(theMethod) Then Throw New KeyNotFoundException
+    '    Return theMethod.CreateDelegate(GetType(Action(Of BattleSideEnum, HideoutEventComponent, HideoutEventComponent.HideoutBattleEndState)), target)
+    'End Function
     Public Function ProgressHeroSkillValue(target As AchievementsCampaignBehavior) As Action(Of Hero, SkillObject, Integer, Boolean)
         Dim theType = GetType(AchievementsCampaignBehavior)
         Dim theMethod = theType.GetMethod("ProgressHeroSkillValue", BindingFlags.NonPublic Or BindingFlags.Instance)
@@ -284,7 +284,7 @@ Public Module EnableAchievement
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled(this))
             CampaignEvents.BeforeHeroKilledEvent.AddNonSerializedListener(this, OnBeforeHeroKilled(this))
             CampaignEvents.ClanTierIncrease.AddNonSerializedListener(this, ProgressClanTier(this))
-            CampaignEvents.OnHideoutBattleCompletedEvent.AddNonSerializedListener(this, OnHideoutBattleCompleted(this))
+            'CampaignEvents.OnHideoutBattleCompletedEvent.AddNonSerializedListener(this, OnHideoutBattleCompleted(this))
             CampaignEvents.HeroGainedSkill.AddNonSerializedListener(this, ProgressHeroSkillValue(this))
             CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, PlayerInventoryExchange(this))
             CampaignEvents.TournamentFinished.AddNonSerializedListener(this, OnTournamentFinish(this))
