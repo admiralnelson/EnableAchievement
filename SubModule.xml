@@ -5,7 +5,7 @@
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>
-      <DependedModule Id="Harmony" />
+      <DependedModule Id="Bannerlord.Harmony" />
     </DependedModules>
      <SubModules>
          <SubModule>
