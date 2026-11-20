@@ -25,18 +25,13 @@ Public Module EnableAchievement
     Public Sub DoIt(gameStarterObject As IGameStarter)
         Try
             Dim campaignStarter = CType(gameStarterObject, CampaignGameStarter)
-            Dim achievementManagerBehaviour = campaignStarter.CampaignBehaviors.Where(Function(x) x.StringId.Contains("AchievementsCampaignBehavior")).FirstOrDefault()
+            Dim achievementManagerBehaviour = campaignStarter.CampaignBehaviors.OfType(Of AchievementsCampaignBehavior)().FirstOrDefault()
             If IsNothing(achievementManagerBehaviour) Then
-                campaignStarter.AddBehavior(New AchievementsCampaignBehavior())
+                achievementManagerBehaviour = New AchievementsCampaignBehavior()
+                campaignStarter.AddBehavior(achievementManagerBehaviour)
             End If
-            Task.Delay(1000 * 2).ContinueWith(
-                Sub()
-                    Dim theType = GetType(AchievementsCampaignBehavior)
-                    Dim deactivateAchievements = theType.GetProperty("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
-                    If IsNothing(deactivateAchievements) Then Exit Sub
-                    deactivateAchievements.SetValue(achievementManagerBehaviour, False)
-                    ShowToastMessage("Hello from Achievements Enabler!")
-                End Sub)
+            Dim deactivateAchievements = GetType(AchievementsCampaignBehavior).GetField("_deactivateAchievements", BindingFlags.NonPublic Or BindingFlags.Instance)
+            deactivateAchievements?.SetValue(achievementManagerBehaviour, False)
         Catch ex As InvalidCastException
             Print("achievement enabler: there's no achievement in custom battle :^)")
         End Try

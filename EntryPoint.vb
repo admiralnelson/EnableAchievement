@@ -23,6 +23,13 @@ Namespace Global.EnableAchievement
             DoIt(gameStarterObject)
 
         End Sub
+
+        Public Overrides Sub OnGameInitializationFinished(game As Game)
+            MyBase.OnGameInitializationFinished(game)
+            If Not IsNothing(Campaign.Current) Then
+                ShowToastMessage("Hello from Achievements Enabler!")
+            End If
+        End Sub
     End Class
 
 End Namespace
